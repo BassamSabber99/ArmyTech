@@ -1,0 +1,178 @@
+﻿@model ArmyTech.ViewModels.EmployeeViewModels
+@{
+    ViewBag.Title = ViewBag.pageTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="direction:rtl">
+    <h2>@ViewBag.pageTitle</h2>
+    <hr />
+
+@using (Html.BeginForm("Save", "Crude", FormMethod.Post, new { @id = "empForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.id)
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(m => m.name, new { @class = " control-label" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.address, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.address, new { @class = " control-label" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Governorateid, new SelectList(Model.Governorate, "id", "name"), "اختر المحافظه", new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.Governorateid, new { @class = " control-label" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <select class="form-control" id="Neighborhoodid" name="Neighborhoodid">
+                <option value>اختر المنطقة</option>
+            </select>
+            @*@Html.DropDownListFor(m => m.Neighborhoodid, new SelectList(Model.Neighborhood, "id", "name"), "اختر المنطقة", new { @class = "form-control" })*@
+        </div>
+        @Html.LabelFor(m => m.Neighborhoodid, new { @class = " control-label" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.CareerFieldid, new SelectList(Model.CareerField, "id", "name"), "اختر المجال الوظيفي", new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.CareerFieldid, new { @class = " control-label" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Companyjobid, new SelectList(Model.CompanyJob, "id", "name"), "اختر  الوظيفة", new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.Companyjobid, new { @class = " control-label" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.qualificationid, new { @class = " control-label" })
+        <div class="col-md-10">
+
+            @foreach (var q in Model.Qualification)
+            {
+                    if (Model.QualificationsEmp == null) { <input type="checkbox" id="@q.ID" name="@q.ID" />}
+                else if (Model.QualificationsEmp.Contains(q))
+                {<input type="checkbox" id="@q.ID" name="@q.ID" checked />}
+                else
+                { <input type="checkbox" id="@q.ID" name="@q.ID" />}
+
+
+                <label>@q.Name</label>
+                <br />
+            }
+        </div>
+    </div>
+    <div class="col-md-10">
+        <input type="submit" class="btn btn-primary" value="اضافة" />
+    </div>
+}
+
+
+
+
+</div>
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            if ($("#Governorateid").val() != "") {
+               
+                    $.ajax({
+                        url: "/api/Neighborhood?id=" + $("#Governorateid").val(),
+                        method: "GET",
+                        success: function (res) {
+                            console.log(res);
+                            var markup = "<option value>اختر المنطقة</option>";
+                            
+                            for (var i = 0; i < res.length; i++) {
+                                if (res[i].id == "@Model.Neighborhoodid") {
+                                    markup += `<option selected="selected" value="${res[i].id}" >${res[i].name}</option>`
+                                }
+                                else {
+                                    markup += `<option value="${res[i].id}">${res[i].name}</option>`;
+                                }
+                                
+                            }
+                            $("#Neighborhoodid").html(markup);
+                        }
+                    });
+                
+            }
+
+            $("#Governorateid").on("change", function () {
+                $.ajax({
+                    url: "/api/Neighborhood?id=" + $(this).val(),
+                    method: "GET",
+                    success: function (res) {
+                        console.log(res);
+                        var markup = "<option value>اختر المنطقة</option>";
+                        for (var i = 0; i < res.length; i++) {
+                            markup += `<option value="${res[i].id}">${res[i].name}</option>`;
+                        }
+                        $("#Neighborhoodid").html(markup);
+                    }
+                });
+            });
+
+
+            
+
+
+         $("input[type=submit]").click(function (e) {
+             e.preventDefault();
+             var form = new FormData(empForm);
+
+             console.log(empVm);
+             var qualifications = [];
+             $("input:checked").each((i, el) => {
+                 qualifications.push($(el).attr('name'));
+             });
+
+
+             var empVm = {
+                 id: form.get("id"),
+                 name: form.get("name"),
+                 address: form.get("address"),
+                 Governorateid: form.get("Governorateid"),
+                 Neighborhoodid: form.get("Neighborhoodid"),
+                 CareerFieldid: form.get("CareerFieldid"),
+                 Companyjobid: form.get("Companyjobid"),
+                 Qualification: qualifications
+             }
+
+             console.log(empVm);
+
+
+
+             $.ajax({
+                 type: "POST",
+                 url: "@Url.Action("Save")",
+                 data: { empVm, qualifications},
+                accept: 'application/json',
+                success: function (res) {
+                    console.log('data: ' + res);
+                    location.href = "/Crude";
+                },
+             
+            });
+
+         })
+
+
+     });
+    </script>    
+    
+    
+}
+
+
+

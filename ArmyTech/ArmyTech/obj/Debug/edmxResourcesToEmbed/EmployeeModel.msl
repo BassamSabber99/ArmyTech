@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="EmployeeModelStoreContainer" CdmEntityContainer="ArmyTechTaskEntities">
+    <EntitySetMapping Name="CareerFields">
+      <EntityTypeMapping TypeName="EmployeeModel.CareerField">
+        <MappingFragment StoreEntitySet="CareerField">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CompanyJobs">
+      <EntityTypeMapping TypeName="EmployeeModel.CompanyJob">
+        <MappingFragment StoreEntitySet="CompanyJob">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="JobArrangement" ColumnName="JobArrangement" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="EmployeeModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="BirthGovernorateId" ColumnName="BirthGovernorateId" />
+          <ScalarProperty Name="BirthNeighborhoodId" ColumnName="BirthNeighborhoodId" />
+          <ScalarProperty Name="CareerFieldId" ColumnName="CareerFieldId" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="CompanyJobId" ColumnName="CompanyJobId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EmployeeQualifications">
+      <EntityTypeMapping TypeName="EmployeeModel.EmployeeQualification">
+        <MappingFragment StoreEntitySet="EmployeeQualification">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="QualificationId" ColumnName="QualificationId" />
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Governorates">
+      <EntityTypeMapping TypeName="EmployeeModel.Governorate">
+        <MappingFragment StoreEntitySet="Governorate">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Neighborhoods">
+      <EntityTypeMapping TypeName="EmployeeModel.Neighborhood">
+        <MappingFragment StoreEntitySet="Neighborhood">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="GovernorateId" ColumnName="GovernorateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Qualifications">
+      <EntityTypeMapping TypeName="EmployeeModel.Qualification">
+        <MappingFragment StoreEntitySet="Qualification">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
